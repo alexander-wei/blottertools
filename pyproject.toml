@@ -1,0 +1,19 @@
+[project]
+name = "blottertools"
+version = "0.1"
+description = "awei"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "Jinja2>=3.1.6",
+    "pandas~=2.3",
+    "tabulate>=0.9",
+    "tzdata>=2025",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+blottercli = "blottercli:BlotterCLI.main"
