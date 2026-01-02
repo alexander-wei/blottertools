@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blottercli &mdash; blottertools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            blottertools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../blottercli.html">blottercli module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions.html">functions module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blottertools.html">blottertools package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">blottertools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">blottercli</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for blottercli</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;blottercli.py&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blottertools.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">PandasExecutor</span><span class="p">,</span> <span class="n">Pipeline</span>
+
+<span class="c1"># pylint: disable=missing-class-docstring, missing-function-docstring</span>
+
+
+<div class="viewcode-block" id="InvalidInputPathError">
+<a class="viewcode-back" href="../blottercli.html#blottercli.InvalidInputPathError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InvalidInputPathError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;raise when input path is invalid&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="PandasReadCSVArgs">
+<a class="viewcode-back" href="../blottercli.html#blottercli.PandasReadCSVArgs">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PandasReadCSVArgs</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;pass to pandas.read_csv()&quot;&quot;&quot;</span>
+
+    <span class="n">dtype</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+        <span class="s2">&quot;sector&quot;</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">CategoricalDtype</span><span class="p">(),</span>
+        <span class="s2">&quot;pal&quot;</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+        <span class="s2">&quot;exposure&quot;</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+        <span class="s2">&quot;ticker&quot;</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">CategoricalDtype</span><span class="p">(),</span>
+    <span class="p">}</span></div>
+
+
+
+<span class="n">PIPELINE_STEPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step1_create_pk</span><span class="p">,</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step2_sector_pal_date</span><span class="p">,</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step3_impute_ticker</span><span class="p">,</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step4_compute_open_liq</span><span class="p">,</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step5_compute_fund_value</span><span class="p">,</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">step6_agg_daily</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="BlotterCLI">
+<a class="viewcode-back" href="../blottercli.html#blottercli.BlotterCLI">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BlotterCLI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Usage: blottercli [filename] -o [output]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_pipeline</span><span class="p">:</span> <span class="n">Pipeline</span>
+    <span class="n">_executor</span><span class="p">:</span> <span class="n">PandasExecutor</span>
+    <span class="n">_args</span><span class="p">:</span> <span class="n">CLIArgs</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BlotterCLI.CLIArgs">
+<a class="viewcode-back" href="../blottercli.html#blottercli.BlotterCLI.CLIArgs">[docs]</a>
+    <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">CLIArgs</span><span class="p">:</span>
+        <span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">eager</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">loglevel_info</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">executor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span> <span class="o">=</span> <span class="n">pipeline</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executor</span> <span class="o">=</span> <span class="n">executor</span>
+
+<div class="viewcode-block" id="BlotterCLI.run">
+<a class="viewcode-back" href="../blottercli.html#blottercli.BlotterCLI.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executor</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BlotterCLI.main">
+<a class="viewcode-back" href="../blottercli.html#blottercli.BlotterCLI.main">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">cli_args</span><span class="p">:</span> <span class="n">CLIArgs</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cli_arg_container</span> <span class="o">=</span> <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">_normalize_args</span><span class="p">(</span><span class="n">cli_args</span><span class="p">)</span>
+        <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">_validate_args</span><span class="p">(</span><span class="n">cli_arg_container</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cli_arg_container</span><span class="o">.</span><span class="n">loglevel_info</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+        <span class="n">steps</span> <span class="o">=</span> <span class="n">PIPELINE_STEPS</span>
+
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">cli_arg_container</span><span class="o">.</span><span class="n">input_path</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">asdict</span><span class="p">(</span><span class="n">PandasReadCSVArgs</span><span class="p">()),</span>
+        <span class="p">)</span>
+
+        <span class="n">executor</span> <span class="o">=</span> <span class="n">PandasExecutor</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">run_eagerly</span><span class="o">=</span><span class="n">cli_arg_container</span><span class="o">.</span><span class="n">eager</span><span class="p">)</span>
+        <span class="n">blottertool</span> <span class="o">=</span> <span class="n">BlotterCLI</span><span class="p">(</span><span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">executor</span><span class="o">=</span><span class="n">executor</span><span class="p">)</span>
+        <span class="n">blottertool</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+        <span class="n">blottertool</span><span class="o">.</span><span class="n">_executor</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>  <span class="c1"># pylint: disable=protected-access</span>
+            <span class="n">cli_arg_container</span><span class="o">.</span><span class="n">output_path</span> <span class="ow">or</span> <span class="n">get_default_output_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()),</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;lkid&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;analyst&quot;</span><span class="p">,</span> <span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;pal&quot;</span><span class="p">,</span> <span class="s2">&quot;exposure&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">],</span>
+            <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.16f</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cli_arg_container</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normalize_args</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">CLIArgs</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CLIArgs</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;argparse overwrites default args that are in CLIArgs&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">CLIArgs</span><span class="p">):</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">CLIArgs</span><span class="p">(</span>
+            <span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">base</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_args</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">CLIArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">input_path</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidInputPathError</span>
+
+<div class="viewcode-block" id="BlotterCLI.parse_args">
+<a class="viewcode-back" href="../blottercli.html#blottercli.BlotterCLI.parse_args">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">parse</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="s2">&quot;blottercli&quot;</span><span class="p">)</span>
+        <span class="n">parse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;input_path&quot;</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;input&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The input file, eg: file.csv, ./path_to_csv/file.csv, .</span><span class="se">\\</span><span class="s2">path_to_csv</span><span class="se">\\</span><span class="s2">file.csv&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;output_path&quot;</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The output file, eg: ./path_to__output/file.csv&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--disable-eager&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;eager&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Transformations will mutate copies of a DataFrame.&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parse</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--info&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;loglevel_info&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;set loglevel info&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">vars</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">())</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_default_output_path">
+<a class="viewcode-back" href="../blottercli.html#blottercli.get_default_output_path">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_default_output_path</span><span class="p">(</span><span class="n">cwd</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s2">&quot;blotter-new.csv&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">BlotterCLI</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

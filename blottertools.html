@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blottertools package &mdash; blottertools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="functions module" href="functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            blottertools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="blottercli.html">blottercli module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">functions module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">blottertools package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-blottertools.adapters">blottertools.adapters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.Executor"><code class="docutils literal notranslate"><span class="pre">Executor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Executor._groupby"><code class="docutils literal notranslate"><span class="pre">Executor._groupby()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Executor.df"><code class="docutils literal notranslate"><span class="pre">Executor.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Executor.groupby"><code class="docutils literal notranslate"><span class="pre">Executor.groupby</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Executor.update_df"><code class="docutils literal notranslate"><span class="pre">Executor.update_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.GroupByLike"><code class="docutils literal notranslate"><span class="pre">GroupByLike</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.GroupByLike.__call__"><code class="docutils literal notranslate"><span class="pre">GroupByLike.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.PandasExecutor"><code class="docutils literal notranslate"><span class="pre">PandasExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.PandasExecutor._groupby"><code class="docutils literal notranslate"><span class="pre">PandasExecutor._groupby()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.PandasExecutor.is_eager"><code class="docutils literal notranslate"><span class="pre">PandasExecutor.is_eager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.PandasExecutor.update_df"><code class="docutils literal notranslate"><span class="pre">PandasExecutor.update_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Pipeline.run"><code class="docutils literal notranslate"><span class="pre">Pipeline.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.Transformation"><code class="docutils literal notranslate"><span class="pre">Transformation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#blottertools.adapters.Transformation.__call__"><code class="docutils literal notranslate"><span class="pre">Transformation.__call__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.adapters.transform"><code class="docutils literal notranslate"><span class="pre">transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-blottertools.decorators">blottertools.decorators module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#blottertools.decorators.df_task"><code class="docutils literal notranslate"><span class="pre">df_task()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-blottertools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">blottertools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">blottertools package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/blottertools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="blottertools-package">
+<h1>blottertools package<a class="headerlink" href="#blottertools-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-blottertools.adapters">
+<span id="blottertools-adapters-module"></span><h2>blottertools.adapters module<a class="headerlink" href="#module-blottertools.adapters" title="Link to this heading"></a></h2>
+<p>adapters.py</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="blottertools.adapters.Executor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">Executor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrameLike</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blottertools/adapters.html#Executor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Executor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Executor interface. Uses _df</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.Executor._groupby">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_groupby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ac</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">av</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrameGroupBy</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#Executor._groupby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Executor._groupby" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="blottertools.adapters.Executor.df">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">df</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">DataFrame</span></em><a class="headerlink" href="#blottertools.adapters.Executor.df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="blottertools.adapters.Executor.groupby">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">groupby</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#blottertools.adapters.GroupByLike" title="blottertools.adapters.GroupByLike"><span class="pre">GroupByLike</span></a></em><a class="headerlink" href="#blottertools.adapters.Executor.groupby" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.Executor.update_df">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#Executor.update_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Executor.update_df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="blottertools.adapters.GroupByLike">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">GroupByLike</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blottertools/adapters.html#GroupByLike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.GroupByLike" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
+<p>GroupByLike methods are compatible with pandas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">groupby</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Axis</span> <span class="o">|</span> <span class="n">lib</span><span class="o">.</span><span class="n">NoDefault</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">no_default</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">IndexLabel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">as_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sort</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">group_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">observed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">lib</span><span class="o">.</span><span class="n">NoDefault</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">no_default</span><span class="p">,</span>
+    <span class="n">dropna</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.GroupByLike.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dropna</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrameGroupBy</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#GroupByLike.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.GroupByLike.__call__" title="Link to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="blottertools.adapters.PandasExecutor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">PandasExecutor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_eagerly</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blottertools/adapters.html#PandasExecutor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.PandasExecutor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#blottertools.adapters.Executor" title="blottertools.adapters.Executor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Executor</span></code></a></p>
+<p>Implements the Executor using an in-memory DataFrame.</p>
+<p>If __is_eager is defined, task functions operate on a single DataFrame
+object. Otherwise, task functions operate on copies and yield
+objects that are reassigned to _df.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.PandasExecutor._groupby">
+<span class="sig-name descname"><span class="pre">_groupby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ac</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">av</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrameGroupBy</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#PandasExecutor._groupby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.PandasExecutor._groupby" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.PandasExecutor.is_eager">
+<span class="sig-name descname"><span class="pre">is_eager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#PandasExecutor.is_eager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.PandasExecutor.is_eager" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.PandasExecutor.update_df">
+<span class="sig-name descname"><span class="pre">update_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#PandasExecutor.update_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.PandasExecutor.update_df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="blottertools.adapters.Pipeline">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#blottertools.adapters.Transformation" title="blottertools.adapters.Transformation"><span class="pre">Transformation</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blottertools/adapters.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Pipeline" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Pipeline is defined as a sequence of ETL tasks. It can be run
+on any executor implementing the Executor interface.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.Pipeline.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#blottertools.adapters.PandasExecutor" title="blottertools.adapters.PandasExecutor"><span class="pre">PandasExecutor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#Pipeline.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Pipeline.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="blottertools.adapters.Transformation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">Transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blottertools/adapters.html#Transformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Transformation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
+<p>Define ETL tasks as functions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">etl_task</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">_executor</span><span class="p">):</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>that mutate a passed DataFrame df, or return a DataFrame df.</p>
+<p>If _executor is passed, its .groupby() method can potentially yield
+in memory savings, if implemented over partitions of groupby keys.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="blottertools.adapters.Transformation.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#blottertools.adapters.Executor" title="blottertools.adapters.Executor"><span class="pre">Executor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#Transformation.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.Transformation.__call__" title="Link to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="blottertools.adapters.transform">
+<span class="sig-prename descclassname"><span class="pre">blottertools.adapters.</span></span><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#blottertools.adapters.PandasExecutor" title="blottertools.adapters.PandasExecutor"><span class="pre">PandasExecutor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#blottertools.adapters.Transformation" title="blottertools.adapters.Transformation"><span class="pre">Transformation</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/blottertools/adapters.html#transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.adapters.transform" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-blottertools.decorators">
+<span id="blottertools-decorators-module"></span><h2>blottertools.decorators module<a class="headerlink" href="#module-blottertools.decorators" title="Link to this heading"></a></h2>
+<p>decorators.py</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="blottertools.decorators.df_task">
+<span class="sig-prename descclassname"><span class="pre">blottertools.decorators.</span></span><span class="sig-name descname"><span class="pre">df_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="_modules/blottertools/decorators.html#df_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blottertools.decorators.df_task" title="Link to this definition"></a></dt>
+<dd><p>df_task(f) defines the &#64;df_task decorator.</p>
+<p>Functions decorated with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">executor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Executor</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>are adapted to the signature</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_f</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">executor</span><span class="p">:</span> <span class="n">Executor</span><span class="p">,</span> <span class="n">is_eager</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>expected by .adapters.Pipeline.</p>
+</dd></dl>
+
+</section>
+<section id="module-blottertools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blottertools" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="functions.html" class="btn btn-neutral float-left" title="functions module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

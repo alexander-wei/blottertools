@@ -1,0 +1,31 @@
+blottertools package
+====================
+
+Submodules
+----------
+
+blottertools.adapters module
+----------------------------
+
+.. automodule:: blottertools.adapters
+   :members:
+   :show-inheritance:
+   :undoc-members:
+   :special-members: __call__
+   :private-members: _groupby
+
+blottertools.decorators module
+------------------------------
+
+.. automodule:: blottertools.decorators
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: blottertools
+   :members:
+   :show-inheritance:
+   :undoc-members:

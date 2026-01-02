@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>functions &mdash; blottertools  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            blottertools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../blottercli.html">blottercli module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions.html">functions module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../blottertools.html">blottertools package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">blottertools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;functions.py&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">decimal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntEnum</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">blottertools.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Executor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">blottertools.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">df_task</span>
+
+<span class="c1"># pylint: disable=missing-function-docstring,missing-class-docstring</span>
+
+<span class="n">INDEX</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lkid&quot;</span><span class="p">,</span> <span class="s2">&quot;ticker&quot;</span><span class="p">]</span>
+
+<span class="c1"># Task functions</span>
+
+
+<div class="viewcode-block" id="step1_create_pk">
+<a class="viewcode-back" href="../functions.html#functions.step1_create_pk">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step1_create_pk</span><span class="p">(</span><span class="n">_df</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;retain a copy of the primary key as &quot;index&quot; from original row order.</span>
+<span class="sd">    This will be referenced by future steps for integrity under initial row order.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        _df.reset_index(inplace=True)</span>
+<span class="sd">        return _df</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<div class="viewcode-block" id="step2_sector_pal_date">
+<a class="viewcode-back" href="../functions.html#functions.step2_sector_pal_date">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step2_sector_pal_date</span><span class="p">(</span><span class="n">_df</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ETL on (sector, pal, exposure, date)</span>
+<span class="sd">    tokenize sector</span>
+<span class="sd">    rename sector</span>
+<span class="sd">    cast (pal, exposure) to Decimal</span>
+<span class="sd">    cast date to datetime from string</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        logging.info(_df.dtypes)</span>
+<span class="sd">        _df[&quot;sector&quot;] = _df[&quot;sector&quot;].astype(pandas.CategoricalDtype(ordered=True))</span>
+<span class="sd">        _df[&quot;sector&quot;] = _df[&quot;sector&quot;].cat.rename_categories(</span>
+<span class="sd">            {&quot;Technology&quot;: &quot;Information Technology&quot;}</span>
+<span class="sd">        )</span>
+
+<span class="sd">        decimal.getcontext().prec = 28  # decimal library default precision</span>
+<span class="sd">        _df[&quot;pal&quot;] = _df[&quot;pal&quot;].apply(decimal.Decimal)</span>
+<span class="sd">        _df[&quot;exposure&quot;] = _df[&quot;exposure&quot;].apply(decimal.Decimal)</span>
+
+<span class="sd">        _df[&quot;date&quot;] = pandas.to_datetime(_df[&quot;date&quot;], yearfirst=True)</span>
+
+<span class="sd">        return _df</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">CategoricalDtype</span><span class="p">(</span><span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">rename_categories</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;Technology&quot;</span><span class="p">:</span> <span class="s2">&quot;Information Technology&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">decimal</span><span class="o">.</span><span class="n">getcontext</span><span class="p">()</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">28</span>  <span class="c1"># decimal library default precision</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;pal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;pal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">)</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">)</span>
+
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">yearfirst</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<div class="viewcode-block" id="step3_impute_ticker">
+<a class="viewcode-back" href="../functions.html#functions.step3_impute_ticker">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step3_impute_ticker</span><span class="p">(</span><span class="n">_df</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;impute ticker column if missing</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        if &quot;ticker&quot; not in _df.columns:</span>
+<span class="sd">            ticker_series = _df.apply(impute_ticker_symbol, axis=PandasAxisType.COLS)</span>
+<span class="sd">            _df[&quot;ticker&quot;] = ticker_series</span>
+
+<span class="sd">        return _df</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;ticker&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">ticker_series</span> <span class="o">=</span> <span class="n">_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">impute_ticker_symbol</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">PandasAxisType</span><span class="o">.</span><span class="n">COLS</span><span class="p">)</span>
+        <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;ticker&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticker_series</span>
+
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<div class="viewcode-block" id="step4_compute_open_liq">
+<a class="viewcode-back" href="../functions.html#functions.step4_compute_open_liq">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step4_compute_open_liq</span><span class="p">(</span><span class="n">_df</span><span class="p">,</span> <span class="n">_executor</span><span class="p">:</span> <span class="n">Executor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute liquidity/exposure for lkid at open of day.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        _df[&quot;open_liq&quot;] = None</span>
+
+<span class="sd">        logging.info(_df.to_markdown())</span>
+
+<span class="sd">        for __, _lkid_ticker_df in _executor.groupby([&quot;lkid&quot;, &quot;ticker&quot;], as_index=False):</span>
+<span class="sd">            # reduce over (lkid, ticker) groups</span>
+
+<span class="sd">            # In the case of a collision:</span>
+<span class="sd">            # reduce (*multiple values, same lkid, same ticker, same day)</span>
+<span class="sd">            #       -&gt; (aggregated(*), lkid, ticker, day)</span>
+<span class="sd">            _lkid_ticker_df = _lkid_ticker_df.groupby(&quot;date&quot;, as_index=True).agg(</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;index&quot;: first_alphabetical,</span>
+<span class="sd">                    &quot;analyst&quot;: first_alphabetical,</span>
+<span class="sd">                    &quot;sector&quot;: first_alphabetical,</span>
+<span class="sd">                    &quot;pal&quot;: &quot;sum&quot;,</span>
+<span class="sd">                    &quot;exposure&quot;: &quot;sum&quot;,</span>
+<span class="sd">                },</span>
+<span class="sd">            )</span>
+
+<span class="sd">            # EOD[i] becomes Open[i+1]</span>
+<span class="sd">            _lkid_ticker_df[&quot;open_liq&quot;] = _lkid_ticker_df[&quot;exposure&quot;].shift(-1, &quot;D&quot;)</span>
+
+<span class="sd">            logging.info(&quot;Shifting day to calculate net liquidity at open in each position&quot;)</span>
+<span class="sd">            logging.info(_lkid_ticker_df.to_markdown())</span>
+
+<span class="sd">            # Impute each group of consecutive days with a first open calculated by</span>
+<span class="sd">            # eod - pal</span>
+<span class="sd">            is_nan = _lkid_ticker_df[&quot;open_liq&quot;].isnull()</span>
+<span class="sd">            logging.info(&quot;null rows&quot;)</span>
+<span class="sd">            logging.info(_lkid_ticker_df[is_nan].to_markdown())</span>
+<span class="sd">            _lkid_ticker_df[is_nan] = _lkid_ticker_df[is_nan].apply(</span>
+<span class="sd">                impute_first_day_open_liq, axis=PandasAxisType.COLS</span>
+<span class="sd">            )</span>
+<span class="sd">            logging.info(&quot;imputing first of sequence for open net liq&quot;)</span>
+<span class="sd">            logging.info(_lkid_ticker_df.to_markdown())</span>
+
+<span class="sd">            logging.info(&quot;reset index&quot;)</span>
+<span class="sd">            # reassign pk to &quot;index&quot; for left join</span>
+<span class="sd">            _lkid_ticker_df = _lkid_ticker_df.set_index(&quot;index&quot;)</span>
+<span class="sd">            logging.info(_lkid_ticker_df.to_markdown())</span>
+
+<span class="sd">            _df.update(_lkid_ticker_df)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;open_liq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">__</span><span class="p">,</span> <span class="n">_lkid_ticker_df</span> <span class="ow">in</span> <span class="n">_executor</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;lkid&quot;</span><span class="p">,</span> <span class="s2">&quot;ticker&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># reduce over (lkid, ticker) groups</span>
+
+        <span class="c1"># In the case of a collision:</span>
+        <span class="c1"># reduce (*multiple values, same lkid, same ticker, same day)</span>
+        <span class="c1">#       -&gt; (aggregated(*), lkid, ticker, day)</span>
+        <span class="n">_lkid_ticker_df</span> <span class="o">=</span> <span class="n">_lkid_ticker_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">first_alphabetical</span><span class="p">,</span>
+                <span class="s2">&quot;analyst&quot;</span><span class="p">:</span> <span class="n">first_alphabetical</span><span class="p">,</span>
+                <span class="s2">&quot;sector&quot;</span><span class="p">:</span> <span class="n">first_alphabetical</span><span class="p">,</span>
+                <span class="s2">&quot;pal&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;exposure&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="c1"># EOD[i] becomes Open[i+1]</span>
+        <span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="s2">&quot;open_liq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Shifting day to calculate net liquidity at open in each position&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_lkid_ticker_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+        <span class="c1"># Impute each group of consecutive days with a first open calculated by</span>
+        <span class="c1"># eod - pal</span>
+        <span class="n">is_nan</span> <span class="o">=</span> <span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="s2">&quot;open_liq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;null rows&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="n">is_nan</span><span class="p">]</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+        <span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="n">is_nan</span><span class="p">]</span> <span class="o">=</span> <span class="n">_lkid_ticker_df</span><span class="p">[</span><span class="n">is_nan</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="n">impute_first_day_open_liq</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">PandasAxisType</span><span class="o">.</span><span class="n">COLS</span>
+        <span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;imputing first of sequence for open net liq&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_lkid_ticker_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;reset index&quot;</span><span class="p">)</span>
+        <span class="c1"># reassign pk to &quot;index&quot; for left join</span>
+        <span class="n">_lkid_ticker_df</span> <span class="o">=</span> <span class="n">_lkid_ticker_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_lkid_ticker_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+        <span class="n">_df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_lkid_ticker_df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<div class="viewcode-block" id="step5_compute_fund_value">
+<a class="viewcode-back" href="../functions.html#functions.step5_compute_fund_value">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step5_compute_fund_value</span><span class="p">(</span><span class="n">_df</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">_executor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute total fund open_liq over all (lkid, ticker) for each day</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        logging.info(&quot;updating&quot;)</span>
+<span class="sd">        logging.info(_df.to_markdown())</span>
+
+<span class="sd">        logging.info(&quot;getting total fund liq for each day&quot;)</span>
+
+<span class="sd">        _df.set_index(&quot;index&quot;, drop=True, inplace=True)</span>
+<span class="sd">        _df[&quot;return&quot;] = None</span>
+
+<span class="sd">        for __, _date_df in _executor.groupby(&quot;date&quot;):</span>
+<span class="sd">            total_daily_fund = _date_df[&quot;open_liq&quot;].agg(&quot;sum&quot;)</span>
+<span class="sd">            logging.info(&quot;beginning of day total fund value %f&quot;, total_daily_fund)</span>
+<span class="sd">            _date_df[&quot;return&quot;] = _date_df[&quot;pal&quot;] / total_daily_fund</span>
+<span class="sd">            logging.info(&quot;calculate return of security&quot;)</span>
+<span class="sd">            logging.info(_date_df.to_markdown())</span>
+<span class="sd">            logging.info(&quot;reset index&quot;)</span>
+
+<span class="sd">            logging.info(_date_df.to_markdown())</span>
+<span class="sd">            _df.update(_date_df)</span>
+
+<span class="sd">        logging.info(&quot;update df&quot;)</span>
+<span class="sd">        logging.info(_df.to_markdown())</span>
+<span class="sd">        return _df</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;updating&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;getting total fund liq for each day&quot;</span><span class="p">)</span>
+
+    <span class="n">_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">__</span><span class="p">,</span> <span class="n">_date_df</span> <span class="ow">in</span> <span class="n">_executor</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">):</span>
+        <span class="n">total_daily_fund</span> <span class="o">=</span> <span class="n">_date_df</span><span class="p">[</span><span class="s2">&quot;open_liq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;beginning of day total fund value </span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">total_daily_fund</span><span class="p">)</span>
+        <span class="n">_date_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_date_df</span><span class="p">[</span><span class="s2">&quot;pal&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_daily_fund</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;calculate return of security&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_date_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;reset index&quot;</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_date_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+        <span class="n">_df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_date_df</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;update df&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<div class="viewcode-block" id="step6_agg_daily">
+<a class="viewcode-back" href="../functions.html#functions.step6_agg_daily">[docs]</a>
+<span class="nd">@df_task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step6_agg_daily</span><span class="p">(</span><span class="n">_df</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute daily returns for (lkid, date) entities</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        logging.info(&quot;applying the replacement transformations and such&quot;)</span>
+<span class="sd">        logging.info(&quot;reducing over ticker now.&quot;)</span>
+
+<span class="sd">        # select * from df     left join      select * from (</span>
+<span class="sd">        #   first(pk), first(...) from df group by (date, lkid)</span>
+<span class="sd">        # ) as A</span>
+<span class="sd">        #  on df.pk = A.pk</span>
+<span class="sd">        # This requires copying the index to a column to use first(pk) with pandas.agg(...)</span>
+<span class="sd">        _df.reset_index(drop=False, inplace=True)</span>
+<span class="sd">        another_df = _df.groupby([&quot;date&quot;, &quot;lkid&quot;], as_index=False).agg(</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;analyst&quot;: first_alphabetical,</span>
+<span class="sd">                &quot;sector&quot;: first_alphabetical,</span>
+<span class="sd">                &quot;pal&quot;: &quot;sum&quot;,</span>
+<span class="sd">                &quot;exposure&quot;: &quot;sum&quot;,</span>
+<span class="sd">                &quot;return&quot;: &quot;sum&quot;,</span>
+<span class="sd">                &quot;index&quot;: get_first_index_label,</span>
+<span class="sd">            },</span>
+<span class="sd">        )</span>
+<span class="sd">        # !</span>
+<span class="sd">        # Reassigning to pal, exposure, return    may result in an invalid state of entities</span>
+<span class="sd">        # In practice, the join should be made to new columns.</span>
+<span class="sd">        _df[&quot;pal&quot;] = None</span>
+<span class="sd">        _df[&quot;exposure&quot;] = None</span>
+<span class="sd">        _df[&quot;return&quot;] = None</span>
+
+<span class="sd">        # reassign pk to df.index</span>
+<span class="sd">        _df.set_index(&quot;index&quot;, inplace=True)</span>
+<span class="sd">        _df.update(another_df)</span>
+
+<span class="sd">        # drop where null because these rows already contributed values under (sum, first) aggregations</span>
+<span class="sd">        # on join</span>
+<span class="sd">        _df.dropna(inplace=True)</span>
+<span class="sd">        _df.set_index([&quot;lkid&quot;, &quot;date&quot;], inplace=True)</span>
+<span class="sd">        _df.sort_index(axis=PandasAxisType.ROWS, inplace=True)</span>
+<span class="sd">        _df.reset_index(drop=False, inplace=True)</span>
+
+<span class="sd">        logging.info(_df)</span>
+<span class="sd">        logging.info(_df.columns)</span>
+<span class="sd">        return _df</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;applying the replacement transformations and such&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;reducing over ticker now.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># select * from df     left join      select * from (</span>
+    <span class="c1">#   first(pk), first(...) from df group by (date, lkid)</span>
+    <span class="c1"># ) as A</span>
+    <span class="c1">#  on df.pk = A.pk</span>
+    <span class="c1"># This requires copying the index to a column to use first(pk) with pandas.agg(...)</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">another_df</span> <span class="o">=</span> <span class="n">_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;lkid&quot;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;analyst&quot;</span><span class="p">:</span> <span class="n">first_alphabetical</span><span class="p">,</span>
+            <span class="s2">&quot;sector&quot;</span><span class="p">:</span> <span class="n">first_alphabetical</span><span class="p">,</span>
+            <span class="s2">&quot;pal&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exposure&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;return&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">get_first_index_label</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="c1"># !</span>
+    <span class="c1"># Reassigning to pal, exposure, return    may result in an invalid state of entities</span>
+    <span class="c1"># In practice, the join should be made to new columns.</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;pal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># reassign pk to df.index</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">another_df</span><span class="p">)</span>
+
+    <span class="c1"># drop where null because these rows already contributed values under (sum, first) aggregations</span>
+    <span class="c1"># on join</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;lkid&quot;</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">PandasAxisType</span><span class="o">.</span><span class="n">ROWS</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_df</span></div>
+
+
+
+<span class="c1"># Utility functions</span>
+
+
+<div class="viewcode-block" id="PandasAxisType">
+<a class="viewcode-back" href="../functions.html#functions.PandasAxisType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PandasAxisType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="n">ROWS</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">COLS</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="first_alphabetical">
+<a class="viewcode-back" href="../functions.html#functions.first_alphabetical">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">first_alphabetical</span><span class="p">(</span><span class="n">series</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        return series.min()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">series</span><span class="o">.</span><span class="n">min</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="impute_first_day_open_liq">
+<a class="viewcode-back" href="../functions.html#functions.impute_first_day_open_liq">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">impute_first_day_open_liq</span><span class="p">(</span><span class="n">row</span><span class="p">:</span> <span class="n">pandas</span><span class="o">.</span><span class="n">Series</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        row[&quot;open_liq&quot;] = row[&quot;exposure&quot;] - row[&quot;pal&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">row</span><span class="p">[</span><span class="s2">&quot;open_liq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;exposure&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;pal&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">row</span></div>
+
+
+
+<div class="viewcode-block" id="impute_ticker_symbol">
+<a class="viewcode-back" href="../functions.html#functions.impute_ticker_symbol">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">impute_ticker_symbol</span><span class="p">(</span><span class="n">_row</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The presence of a ticker column makes no difference in the computed return.</span>
+<span class="sd">    Return is aggregated over (date, lkid), so arbitrary values can be imputed if</span>
+<span class="sd">    allowed by resource constraints.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        return f&quot;ticker_{_row[&quot;index&quot;]}&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ticker_</span><span class="si">{</span><span class="n">_row</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="get_first_index_label">
+<a class="viewcode-back" href="../functions.html#functions.get_first_index_label">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_first_index_label</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the index label of the first row in the group</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        return group.index[0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">group</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

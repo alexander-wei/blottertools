@@ -1,0 +1,7 @@
+blottercli module
+=================
+
+.. automodule:: blottercli
+   :members:
+   :show-inheritance:
+   :undoc-members:
